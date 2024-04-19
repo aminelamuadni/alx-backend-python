@@ -15,8 +15,8 @@ def zoom_array(lst: Tuple, factor: int = 2) -> List:
 
     Args:
         lst (Tuple): Tuple of elements to be expanded.
-        factor (int): The number of times each element is repeated in the output
-        list. Defaults to 2.
+        factor (int): The number of times each element is repeated in the
+        output list. Defaults to 2.
 
     Returns:
         List: A list containing the repeated elements.
