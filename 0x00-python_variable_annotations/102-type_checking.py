@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
 """
-Module to perform element replication in lists based on a multiplication factor.
+This module provides a function to zoom into an array (tuple) by replicating
+each element a specified number of times.
 """
 
 
-from typing import List
+from typing import Tuple, List
 
 
-def zoom_array(lst: List[int], factor: int = 2) -> List[int]:
+def zoom_array(lst: Tuple, factor: int = 2) -> List:
     """
-    Replicates each element in the list 'lst' a 'factor' number of times.
+    Expands elements of a tuple into a list by repeating each element multiple
+    times.
 
     Args:
-        lst (List[int]): List to be zoomed.
-        factor (int): Replication factor, defaults to 2.
+        lst (Tuple): Tuple of elements to be expanded.
+        factor (int): The number of times each element is repeated in the output
+        list. Defaults to 2.
 
     Returns:
-        List[int]: List with replicated elements.
+        List: A list containing the repeated elements.
     """
-    return [item for item in lst for _ in range(factor)]
+    zoomed_in: List = [
+        item for item in lst
+        for _ in range(factor)
+    ]
+    return zoomed_in
 
-
-# Example usage
 array = [12, 72, 91]
-zoom_2x = zoom_array(array)
-zoom_3x = zoom_array(array, 3)
+
+zoom_2x = zoom_array(tuple(array))
+
+zoom_3x = zoom_array(tuple(array), 3)
