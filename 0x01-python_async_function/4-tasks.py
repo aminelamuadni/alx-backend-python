@@ -5,12 +5,13 @@ each waiting for a random delay, and then gathers their results.
 """
 
 import asyncio
+from typing import List
 
 
 task_wait_random = __import__('3-tasks').task_wait_random
 
 
-async def task_wait_n(n: int, max_delay: int) -> list:
+async def task_wait_n(n: int, max_delay: int) -> List[float]:
     """
     Spawns n tasks that each wait for a random delay and then gathers their
     results in the order they complete.
