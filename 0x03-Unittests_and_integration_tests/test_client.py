@@ -83,6 +83,29 @@ class TestGithubOrgClient(unittest.TestCase):
             # Verify that the _public_repos_url property was accessed once
             mock_repos_url.assert_called_once()
 
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False)
+    ])
+    def test_has_license(self, repo, license_key, expected):
+        """
+        Test that GithubOrgClient.has_license accurately checks if the
+        repository's license matches the provided license key.
+
+        Args:
+            repo (dict): The repository data containing a license key.
+            license_key (str): The license key to check against the
+                               repository's license.
+            expected (bool): The expected result of the check.
+
+        Tests:
+            Verify that the function returns True when the license keys match,
+            and False otherwise.
+        """
+        github_org_client = GithubOrgClient("google")
+        result = github_org_client.has_license(repo, license_key)
+        self.assertEqual(result, expected)
+
 
 if __name__ == '__main__':
     unittest.main()
