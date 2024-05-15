@@ -67,6 +67,9 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
+    """
+    Test case class for testing the get_json function.
+    """
 
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
