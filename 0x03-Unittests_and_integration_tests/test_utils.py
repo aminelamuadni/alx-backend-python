@@ -7,8 +7,10 @@ scenarios using the parameterized test approach.
 """
 
 import unittest
+
+from unittest.mock import patch
 from parameterized import parameterized
-from utils import access_nested_map
+from utils import access_nested_map, get_json
 from typing import Any, Dict, Mapping, Sequence, Tuple
 
 
@@ -62,6 +64,36 @@ class TestAccessNestedMap(unittest.TestCase):
         """
         with self.assertRaises(Exception):
             access_nested_map(nested_map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    @patch('requests.get')
+    def test_get_json(self, test_url, test_payload, mock_get):
+        """
+        Test the get_json function to ensure it returns the correct payload
+        for different URLs without making actual HTTP calls.
+
+        Args:
+            test_url (str): The URL to be tested.
+            test_payload (dict): The expected JSON payload returned from the
+                                 URL.
+            mock_get: The mock object for the requests.get call.
+        """
+        # Configure the mock to return a response object with a .json() method
+        mock_get.return_value.json.return_value = test_payload
+
+        # Call the function with the test URL
+        result = get_json(test_url)
+
+        # Ensure get_json returns the correct payload
+        self.assertEqual(result, test_payload)
+
+        # Check that requests.get was called exactly once with the test URL
+        mock_get.assert_called_once_with(test_url)
 
 
 if __name__ == '__main__':
