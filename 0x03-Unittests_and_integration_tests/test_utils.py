@@ -10,7 +10,7 @@ import unittest
 
 from unittest.mock import patch
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 from typing import Any, Dict, Mapping, Sequence, Tuple
 
 
@@ -67,6 +67,7 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
+
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False})
@@ -94,6 +95,53 @@ class TestGetJson(unittest.TestCase):
 
         # Check that requests.get was called exactly once with the test URL
         mock_get.assert_called_once_with(test_url)
+
+
+class TestMemoize(unittest.TestCase):
+    """
+    TestMemoize class contains unit tests for the `memoize` decorator.
+    It verifies that memoization properly caches the method output to
+    prevent redundant calculations.
+    """
+
+    def test_memoize(self):
+        """
+        Tests the memoize decorator by ensuring a method is only executed once
+        when its memoized property is accessed multiple times.
+        """
+
+        class TestClass:
+            """
+            Test class with a method and a memoized property.
+            """
+
+            def a_method(self):
+                """
+                Simulates a method that would ideally perform a calculation.
+                """
+                return 42
+
+            @memoize
+            def a_property(self):
+                """
+                Memoized property designed to cache the result of a_method.
+                """
+                return self.a_method()
+
+        # Create an instance of TestClass
+        test_obj = TestClass()
+        with patch.object(test_obj, 'a_method',
+                          return_value=42) as mocked_method:
+            # Access the memoized property twice
+            result1 = test_obj.a_property
+            result2 = test_obj.a_property
+
+            # Ensure the results are consistent
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+
+            # Verify a_method was called exactly once
+            mocked_method.assert_called_once()
 
 
 if __name__ == '__main__':
